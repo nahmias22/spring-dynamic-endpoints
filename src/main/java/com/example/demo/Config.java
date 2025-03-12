@@ -8,7 +8,6 @@ import com.example.demo.controller.TestController;
 import com.example.demo.controller.TestRController;
 import com.example.demo.core.EndpointRegistrar;
 
-
 @Configuration
 public class Config {
 

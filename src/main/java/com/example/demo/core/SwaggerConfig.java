@@ -29,24 +29,15 @@ public class SwaggerConfig {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Value("${build.version:}")
-    private String buildVersion;
-
-    @Value("${build.timestamp:}")
-    private String buildTimestamp;
-
     @Autowired
     private ApplicationContext applicationContext;
-
-//    @Autowired
-//    private RequestMappingHandlerMapping handlerMapping;
 
     @Bean
     public OpenAPI api() {
         OpenAPI openAPI = new OpenAPI()
                 .addServersItem(new Server().url("/").description("Default Server URL"))
                 .info(new Info()
-                        .title("DEMO App")
+                        .title(applicationName)
                         .description("Demo Application")
                         .contact(new Contact()
                                 .name("Philip G. Nahmias")
@@ -62,11 +53,4 @@ public class SwaggerConfig {
         addRestControllers(controllers.toArray(new Class[0]));
         return openAPI;
     }
-
-//    @Bean
-//    public RouterFunction<ServerResponse> dynamicRoutes() {
-//        RouterFunction<ServerResponse> routes = (RouterFunction<ServerResponse>) applicationContext.getBean("route");
-//        return routes;
-//    }
-
 }

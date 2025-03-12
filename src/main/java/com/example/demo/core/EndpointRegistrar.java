@@ -2,6 +2,8 @@ package com.example.demo.core;
 
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -9,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.example.demo.util.Json;
+
 import jakarta.annotation.PostConstruct;
 
 public class EndpointRegistrar {
+
+    Logger log = LoggerFactory.getLogger(EndpointRegistrar.class);
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -37,15 +43,16 @@ public class EndpointRegistrar {
                 for (Method method : methods) {
                     RequestMapping requestMapping = AnnotationUtils.findAnnotation(method, RequestMapping.class);
                     if (requestMapping != null) {
-                        RequestMappingInfo requestMappingInfo = RequestMappingInfo.paths(getPath(classRequestMapping, requestMapping))
+                        String[] path = getPath(classRequestMapping, requestMapping);
+                        RequestMappingInfo requestMappingInfo = RequestMappingInfo.paths(path)
                                 .methods(requestMapping.method())
                                 .produces(requestMapping.produces())
                                 .build();
                         handlerMapping.registerMapping(requestMappingInfo, bean, method);
+                        log.info("Exposing endpoint: {} - {}", requestMapping.method(), path[0]);
                     }
                 }
             }
         });
-        System.out.println(((RequestMappingHandlerMapping)applicationContext.getBean("requestMappingHandlerMapping")).getHandlerMethods());
     }
 }

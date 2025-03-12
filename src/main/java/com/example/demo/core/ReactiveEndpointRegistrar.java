@@ -44,8 +44,6 @@ public class ReactiveEndpointRegistrar {
         RequestMappingHandlerMapping handlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
         RouterFunctions.Builder builder = RouterFunctions.route();
 
-        builder.GET("/get",  request-> ServerResponse.ok().bodyValue("dummy"));
-
         // Iterate over beans with @RequestMapping annotations
         Map<String, Object> beans = applicationContext.getBeansWithAnnotation(RequestMapping.class);
         for (Map.Entry<String, Object> entry : beans.entrySet()) {
@@ -58,7 +56,6 @@ public class ReactiveEndpointRegistrar {
                 RequestMapping methodMapping = AnnotationUtils.findAnnotation(method, RequestMapping.class);
                 if (methodMapping != null) {
                     String path = getPath(classMapping, methodMapping);
-                    log.info("Registering path: " + Json.toString(methodMapping.method()) + " - " + path + " for method: " + method.getName());
 
                     RequestMethod httpMethod = Arrays.stream(methodMapping.method()).findFirst().get();
                     switch (httpMethod) {
@@ -74,14 +71,10 @@ public class ReactiveEndpointRegistrar {
                             .build();
 
                     handlerMapping.registerMapping(requestMappingInfo, bean, method);
+                    log.info("Exposing endpoint: [{}] - {}", httpMethod, path);
                 }
             }
         }
-
-        var requestMappingHandlers = ((RequestMappingHandlerMapping)applicationContext.getBean("requestMappingHandlerMapping")).getHandlerMethods()
-                .keySet();
-        log.info(Json.toString(requestMappingHandlers));
-
         return builder.build();
     }
 
