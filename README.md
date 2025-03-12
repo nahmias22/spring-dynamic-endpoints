@@ -154,4 +154,4 @@ And this will is the reason why in the case of the reactive registrar we had to 
 ## Conclusion
 In this article I had no intention to delve into the debate over the use of annotations in Spring and their merits and drawbacks. As I mention in the introduction the framework offers a number of automations that we often take for granted and don't need to examine more closely. So if one can structure their application code in such a way that annotations fulfill all their needs, I say good for them!
 
-The reality is that for both modes of operation a significant layer of complexity is added to the application, but in exchange we do gain a significant level of control over the exposed endpoints.
+The reality is that for both modes of operation, a significant layer of complexity is added to the application, but in exchange we do gain a significant level of control over the exposed endpoints.
